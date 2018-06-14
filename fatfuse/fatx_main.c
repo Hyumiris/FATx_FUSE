@@ -3,10 +3,15 @@
 #include <fuse.h>
 #include <string.h>
 #include <errno.h>
+#include <stdio.h>
+
+#include <file_access.h>
 
 static const char *filepath = "/file";
 static const char *filename = "file";
 static const char *filecontent = "I'm the content of the only file available there\n";
+
+static char* imagefile = NULL;
 
 static int getattr_callback(const char *path, struct stat *stbuf)
 {
@@ -83,5 +88,18 @@ static struct fuse_operations fuse_example_operations = {
 
 int main(int argc, char *argv[])
 {
-	return fuse_main(argc, argv, &fuse_example_operations, NULL);
+	if(argc < 2)
+		return -1;
+	
+	if(setSourcefile(argv[1])) {
+		perror("no valid image file");
+		return 1;
+	}
+	
+	char* normalArgs[argc - 1];
+	normalArgs[0] = argv[0];
+	for(int i = 2; i < argc; ++i)
+		normalArgs[i - 1] = argv[i];
+	
+	return fuse_main(argc - 1, normalArgs, &fuse_example_operations, NULL);
 }
