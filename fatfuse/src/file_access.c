@@ -14,11 +14,7 @@ int setSourcefile(char const* path) {
 		return -1;
 	}
 	
-	char const* pathcpy = path;
-	int pathlength = 1;
-	while(*pathcpy++) pathlength++;
-	char sourcefile[pathlength];
-	strcpy(sourcefile, path);
+	sourcefile = strdup(path);
 	
 	return 0;
 }
