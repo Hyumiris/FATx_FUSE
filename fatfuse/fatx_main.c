@@ -6,6 +6,7 @@
 #include <stdio.h>
 
 #include <file_access.h>
+#include <read_bootsec.h>
 
 static const char *filepath = "/file";
 static const char *filename = "file";
@@ -88,7 +89,7 @@ static struct fuse_operations fuse_example_operations = {
 
 int main(int argc, char *argv[])
 {
-	if(argc < 2)
+	if(argc < 2) 		
 		return -1;
 	
 	if(setSourcefile(argv[1])) {
@@ -96,6 +97,11 @@ int main(int argc, char *argv[])
 		return 1;
 	}
 	
+	if (readBootsector(sourcefile))	{
+		perror("reading bootsector failed");
+		return 2;
+	}
+
 	char* normalArgs[argc - 1];
 	normalArgs[0] = argv[0];
 	for(int i = 2; i < argc; ++i)
