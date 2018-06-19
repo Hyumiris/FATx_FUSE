@@ -23,7 +23,7 @@ int readBootsector(const char* path)
         return -1;
     }
  
-	char c;
+	char c;	
  	int b_count = 0x00; 	   
  	numberBytesPerBlock = 0;
  	numberReservedSectors = 0;
@@ -33,33 +33,53 @@ int readBootsector(const char* path)
 
     while((c = fgetc(fp)) != 0) 
     {
-    	if (b_count == 0x0B || b_count == 0x0C) 
+    	if (b_count == 0x0B) 
+    	{
+    		numberBytesPerBlock += c << sizeof(uint8_t);
+    	} 
+    	else if (b_count == 0x0C) 
     	{
     		numberBytesPerBlock += c;
-    	} 
+    	}
     	else if (b_count == 0x0D) 
     	{
     		numberBlocksPerCluster = c;
     	} 
-    	else if (b_count == 0x0E || b_count == 0x0F) 
+    	else if (b_count == 0x0E) 
     	{
-    		numberReservedSectors += c;
+    		numberReservedSectors += c << sizeof(uint8_t);
+    	}
+    	else if (b_count == 0x0F)
+    	{
+    		numberReservedSectors += c;	
     	}
     	else if (b_count == 0x10)
     	{
     		numberFATs = c;
     	}
-    	else if (b_count == 0x11 || b_count == 0x12)
+    	else if (b_count == 0x11)
+    	{
+    		numberRootDirectories += c << sizeof(uint8_t);
+    	}
+    	else if (b_count == 0x12)
     	{
     		numberRootDirectories += c;
     	}
-    	else if (b_count == 0x13 || b_count == 0x14)
+    	else if (b_count == 0x13)
     	{
-    		totalNumberBlocks += c;
+    		totalNumberBlocks += c << sizeof(uint8_t);
     	}
-    	else if (b_count == 0x16 || b_count == 0x17)
+    	else if (b_count == 0x14)
     	{
-    		numberBlocksPerFAT += c;
+    		totalNumberBlocks += c;	
+    	}
+    	else if (b_count == 0x16)
+    	{
+    		numberBlocksPerFAT += c << sizeof(uint8_t);
+    	}
+    	else if (b_count == 0x17)
+    	{
+    		numberBlocksPerFAT += c;	
     	}
     }
 
