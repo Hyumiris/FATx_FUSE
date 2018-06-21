@@ -31,8 +31,10 @@ int readBootsector(const char* path)
  	totalNumberBlocks = 0;
  	numberBlocksPerFAT = 0;
 
-    while((c = fgetc(fp)) != 0) 
+    while(b_count < 0x18) 
     {
+    	c = fgetc(fp);
+
     	if (b_count == 0x0B) 
     	{
     		numberBytesPerBlock += c << sizeof(uint8_t);
@@ -81,6 +83,8 @@ int readBootsector(const char* path)
     	{
     		numberBlocksPerFAT += c;	
     	}
+
+    	b_count += 1;
     }
 
     fclose (fp);
