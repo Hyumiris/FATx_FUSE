@@ -5,16 +5,18 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-short numberBytesPerBlock;
+uint16_t numberBytesPerBlock;
 uint8_t numberBlocksPerCluster;
-short numberReservedSectors;
+uint16_t numberReservedSectors;
 uint8_t numberFATs;
-short numberRootDirectories;
-short totalNumberBlocks;
-short numberBlocksPerFAT;
+uint16_t numberRootDirectories;
+uint16_t totalNumberBlocks;
+uint16_t numberBlocksPerFAT;
+uint16_t fat_x;
 
 int readBootsector(const char* path)
 {
+	errno = 0;
 	FILE *fp;
     fp = fopen(path, "r");
 
@@ -23,25 +25,26 @@ int readBootsector(const char* path)
         return -1;
     }
  
-	char c;	
+	unsigned char c;	
  	int b_count = 0x00; 	   
  	numberBytesPerBlock = 0;
  	numberReservedSectors = 0;
  	numberRootDirectories = 0;
  	totalNumberBlocks = 0;
  	numberBlocksPerFAT = 0;
+ 	fat_x = 0;
 
-    while(b_count < 0x18) 
+    while(b_count <= 0x3A) 
     {
     	c = fgetc(fp);
 
     	if (b_count == 0x0B) 
     	{
-    		numberBytesPerBlock += c << sizeof(uint8_t);
+    		numberBytesPerBlock += c;
     	} 
     	else if (b_count == 0x0C) 
     	{
-    		numberBytesPerBlock += c;
+    		numberBytesPerBlock += c << 8;
     	}
     	else if (b_count == 0x0D) 
     	{
@@ -49,11 +52,11 @@ int readBootsector(const char* path)
     	} 
     	else if (b_count == 0x0E) 
     	{
-    		numberReservedSectors += c << sizeof(uint8_t);
+    		numberReservedSectors += c;
     	}
     	else if (b_count == 0x0F)
     	{
-    		numberReservedSectors += c;	
+    		numberReservedSectors += c << 8;	
     	}
     	else if (b_count == 0x10)
     	{
@@ -61,27 +64,35 @@ int readBootsector(const char* path)
     	}
     	else if (b_count == 0x11)
     	{
-    		numberRootDirectories += c << sizeof(uint8_t);
+    		numberRootDirectories += c;
     	}
     	else if (b_count == 0x12)
     	{
-    		numberRootDirectories += c;
+    		numberRootDirectories += c << 8;
     	}
     	else if (b_count == 0x13)
     	{
-    		totalNumberBlocks += c << sizeof(uint8_t);
+    		totalNumberBlocks += c;
     	}
     	else if (b_count == 0x14)
     	{
-    		totalNumberBlocks += c;	
+    		totalNumberBlocks += c << 8;	
     	}
     	else if (b_count == 0x16)
     	{
-    		numberBlocksPerFAT += c << sizeof(uint8_t);
+    		numberBlocksPerFAT += c;
     	}
     	else if (b_count == 0x17)
     	{
-    		numberBlocksPerFAT += c;	
+    		numberBlocksPerFAT += c << 8;	
+    	}
+    	else if (b_count == 0x39)
+    	{
+    		fat_x += (c - 48) * 10;
+    	}
+    	else if (b_count == 0x3A)
+    	{
+    		fat_x += c - 48;
     	}
 
     	b_count += 1;

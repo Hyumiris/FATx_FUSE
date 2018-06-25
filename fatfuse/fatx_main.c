@@ -106,6 +106,15 @@ int main(int argc, char *argv[])
 	normalArgs[0] = argv[0];
 	for(int i = 2; i < argc; ++i)
 		normalArgs[i - 1] = argv[i];
-	
+
+	printf("numberBytesPerBlock: %i \n", numberBytesPerBlock);
+	printf("numberBlocksPerCluster: %i \n", numberBlocksPerCluster);
+	printf("numberReservedSectors: %i \n", numberReservedSectors);
+	printf("numberFATs: %i \n", numberFATs);
+	printf("numberRootDirectories: %i \n", numberRootDirectories);
+	printf("totalNumberBlocks: %i \n", totalNumberBlocks);
+	printf("numberBlocksPerFAT: %i \n", numberBlocksPerFAT);
+	printf("fat_x: %i \n", fat_x);
+
 	return fuse_main(argc - 1, normalArgs, &fuse_example_operations, NULL);
 }
