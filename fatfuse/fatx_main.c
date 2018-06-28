@@ -5,7 +5,7 @@
 #include <errno.h>
 #include <stdio.h>
 
-#include <file_access.h>
+#include <image_access.h>
 #include <read_bootsec.h>
 
 static const char *filepath = "/file";
