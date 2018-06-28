@@ -1,5 +1,5 @@
 
-#include <file_access.h>
+#include <image_access.h>
 
 #include <stdlib.h>
 #include <stdint.h>
