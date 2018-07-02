@@ -62,7 +62,9 @@ int main(int argc, char *argv[])
 	char Ende[] = {0x55, 0xaa};
 	fwrite(Ende, 2,1,fp);
 
-	for (int i = 0; i < 9 * 512; i++) {
+	char first_fat_entry[] = {0xF0, 0x7F, 0xFF};
+	fwrite(first_fat_entry, 3, 1, fp);
+	for (int i = 0; i < 9 * 512 - 3; i++) {
 		fwrite(Null, 1,1,fp);
 	}
 
