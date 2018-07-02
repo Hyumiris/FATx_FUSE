@@ -7,6 +7,7 @@
 
 #include <image_access.h>
 #include <read_bootsec.h>
+#include <file_allocation_table.h>
 
 static const char *filepath = "/file";
 static const char *filename = "file";
@@ -116,7 +117,11 @@ int main(int argc, char *argv[])
 	printf("totalNumberBlocks: %i \n", totalNumberBlocks);
 	printf("numberBlocksPerFAT: %i \n", numberBlocksPerFAT);
 	printf("fat_x: %i \n", fat_x);
+
+	printf("first entry: %i \n", getFATEntry(2));
+	printf("second entry: %i \n", getFATEntry(3));
 	*/
+
 
 	return fuse_main(argc - 1, normalArgs, &fuse_example_operations, NULL);
 }
