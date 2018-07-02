@@ -22,9 +22,8 @@ long long getFATEntry(int pos) {
 
 	/* from here on fat12 only */
 
-	int index = pos - 2;
-	int mod = index % 2;
-	index = index / 2 * 3;
+	int mod = pos % 2;
+	int index = pos / 2 * 3;
 
 	if(mod) {
 		entry = (fat[index + 1] >> 4) + (fat[index + 2] << 4);

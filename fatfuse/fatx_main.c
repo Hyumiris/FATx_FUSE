@@ -118,8 +118,8 @@ int main(int argc, char *argv[])
 	printf("numberBlocksPerFAT: %i \n", numberBlocksPerFAT);
 	printf("fat_x: %i \n", fat_x);
 
-	printf("first entry: %i \n", getFATEntry(2));
-	printf("second entry: %i \n", getFATEntry(3));
+	printf("first entry: %i \n", getFATEntry(0));
+	printf("second entry: %i \n", getFATEntry(1));
 	*/
 
 
