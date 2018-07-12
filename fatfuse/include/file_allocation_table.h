@@ -1,2 +1,2 @@
 
-long long getFatEntry(int pos);
+long long getFATEntry(int pos);

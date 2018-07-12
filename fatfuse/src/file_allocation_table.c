@@ -11,9 +11,6 @@ int firstFATAdress() {
 
 long long getFATEntry(int pos) {
 
-	// as 0 and 1 are reserved values only entries >=2 should be requested
-	if(pos < 2) return -1;
-
 	int fatSize = numberBytesPerBlock * numberBlocksPerFAT;
 	uint8_t fat[fatSize];
 	readImage(firstFATAdress(), firstFATAdress() + fatSize , fat);
